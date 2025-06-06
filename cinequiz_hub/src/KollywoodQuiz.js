@@ -2,14 +2,17 @@ import React, { useEffect, useState } from "react";
 import { fetchKollywoodMovies } from "./tmdbApi";
 
 /**
- * Quiz generator for Kollywood:
- * Shows the name of a Tamil movie in Tamil script (if available),
- * asks for the release year as the answer (in English).
+ * Generates a quiz question for Kollywood:
+ * Shows the movie title in Tamil script (if available).
+ * Question and all quiz text are presented in English.
+ * The answer is the release year (in English numerals).
  */
 function makeKollywoodQuestion(movie) {
+  // Use TMDB's original_title if it's likely Tamil script, else use title.
   const tamilTitle = movie.original_title || movie.title || "";
   return {
-    question: `திரைப்படம் "${tamilTitle}" வெளியான ஆண்டு என்ன? (What is the release year?)`,
+    // Question in English, refer to "movie below": title is shown separately in Tamil.
+    question: `What is the release year of this Kollywood movie?`,
     answer: movie.release_date ? movie.release_date.slice(0, 4) : "",
     tamilTitle,
     movie,
@@ -37,7 +40,7 @@ function KollywoodQuiz() {
       // Pick a random page to get variety
       const randPage = Math.floor(Math.random() * 5) + 1;
       const results = await fetchKollywoodMovies({ page: randPage });
-      // Prefer original_title that is in Tamil script if present
+      // Only movies with valid title and release
       const movs = (results.results || []).filter(
         m => m.release_date && (m.original_title || m.title)
       );
@@ -60,9 +63,9 @@ function KollywoodQuiz() {
     e.preventDefault();
     if (!quiz) return;
     if (userAnswer.trim() === quiz.answer) {
-      setFeedback("✅ சரி! Correct!");
+      setFeedback("✅ Correct!");
     } else {
-      setFeedback(`❌ தவறு. The correct year is ${quiz.answer}.`);
+      setFeedback(`❌ Incorrect. The correct year is ${quiz.answer}.`);
     }
   }
 
@@ -70,7 +73,8 @@ function KollywoodQuiz() {
     <div
       className="quiz-section"
       style={{
-        fontFamily: tamilFontStack,
+        // Use default sans-serif for English quiz text, override for Tamil title below
+        fontFamily: "'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif",
         background: "rgba(242,218,248,0.91)",
         borderRadius: 10,
         padding: 24,
@@ -81,7 +85,7 @@ function KollywoodQuiz() {
       }}
     >
       <h2 style={{
-        fontFamily: tamilFontStack,
+        fontFamily: "'Inter', 'Roboto', 'Helvetica', 'Arial', sans-serif",
         color: "#9932cc",
         fontWeight: 600,
         fontSize: "1.6rem"
@@ -91,8 +95,22 @@ function KollywoodQuiz() {
       {loading && <div>Loading...</div>}
       {quiz && !loading && (
         <>
-          <div style={{ margin: "1rem 0", fontSize: "1.13rem", lineHeight: 1.55 }}>
+          <div style={{ margin: "1rem 0 0.4rem 0", fontSize: "1.13rem", lineHeight: 1.55 }}>
             {quiz.question}
+          </div>
+          {/* Movie title in Tamil script, styled with Tamil-supporting font */}
+          <div
+            style={{
+              fontFamily: tamilFontStack,
+              fontSize: "1.25rem",
+              color: "#ca007a",
+              margin: "0.6rem 0 1.1rem 0",
+              textAlign: "center",
+              wordBreak: "break-word"
+            }}
+            aria-label="Kollywood Movie Title (Tamil)"
+          >
+            {quiz.tamilTitle}
           </div>
           <form onSubmit={submit} style={{ display: "flex", gap: 8 }}>
             <input
