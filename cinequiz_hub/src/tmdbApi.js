@@ -69,15 +69,22 @@ export async function discoverMovies(language, options = {}) {
   return res.json();
 }
 
-// PUBLIC_INTERFACE
 /**
- * Example: get Tamil movie results for Kollywood quizzes.
- * @param {object} [options]
- * @returns {Promise<object>} List of tamil movies
+ * PUBLIC_INTERFACE
+ * Fetch Tamil (Kollywood) movies using TMDB "original_language=ta" for higher reliability.
+ * Uses /discover/movie with original_language filter for proper Kollywood selection.
+ * 
+ * @param {object} [options] Optional params (page, etc.)
+ * @returns {Promise<object>} List of Tamil (Kollywood) movies
  */
 export function fetchKollywoodMovies(options = {}) {
-  // TMDB 'ta-IN' for Tamil, sort by popularity by default
-  return discoverMovies("ta-IN", { sort_by: "popularity.desc", ...options });
+  // Prefer "original_language=ta" to directly get Tamil movies
+  // TMDB 'ta-IN' as display language, 'ta' as original_language
+  return discoverMovies("ta-IN", {
+    sort_by: "popularity.desc",
+    original_language: "ta", // ensure only Tamil originals
+    ...options,
+  });
 }
 
 // PUBLIC_INTERFACE
