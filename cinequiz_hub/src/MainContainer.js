@@ -12,56 +12,50 @@ import KollywoodQuiz from "./KollywoodQuiz";
 // PUBLIC_INTERFACE
 function MainContainer({ user }) {
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        padding: "96px 0 32px 0",
-        background: "var(--base-dark)",
-        color: "var(--text-color)",
-      }}
-    >
-      <nav className="navbar" style={{ position: "fixed", width: "100%", top: 0, zIndex: 100 }}>
-        <div className="container" style={{ width: "100%" }}>
-          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
-            <div className="logo">
-              <span className="logo-symbol">*</span> CineQuiz Hub
-            </div>
-            <span style={{
-              fontWeight: 500,
-              color: "var(--base-light)",
-              marginRight: 8,
-            }}>
-              {user ? <>Welcome, {user.username}</> : ""}
-            </span>
-          </div>
-        </div>
-      </nav>
-      <div
-        className="container"
+    <div style={{ minHeight: "100vh", width: "100%", background: "var(--base-dark)", color: "var(--text-color)" }}>
+      {/* Simple top nav with plain branding and username */}
+      <nav
         style={{
-          marginTop: 32,
-          marginBottom: 32,
+          width: "100%",
+          background: "var(--base-dark)",
+          color: "var(--text-color)",
+          borderBottom: "1px solid var(--border-color)",
+          padding: "18px 20px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          position: "fixed",
+          top: 0,
+          zIndex: 100,
         }}
       >
-        <div
-          className="quiz-dashboard"
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            gap: 36,
-            justifyContent: "center",
-            alignItems: "flex-start",
-            flexWrap: "wrap",
-          }}
-        >
-          {/* Hollywood Quiz - Left Column */}
-          <div style={{ flex: 1, minWidth: 320, maxWidth: 410 }}>
-            <HollywoodQuiz />
-          </div>
-          {/* Kollywood Quiz - Right Column */}
-          <div style={{ flex: 1, minWidth: 320, maxWidth: 410 }}>
-            <KollywoodQuiz />
-          </div>
+        <span style={{ fontWeight: 700, fontSize: "1.23rem" }}>CineQuiz Hub</span>
+        <span style={{ fontSize: "1rem", color: "var(--base-light)", fontWeight: 500 }}>
+          {user ? `Welcome, ${user.username}` : ""}
+        </span>
+      </nav>
+      {/* Spacer for navbar height */}
+      <div style={{ height: 62 }} />
+      {/* Minimal two-column layout for quizzes */}
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "stretch",
+          gap: 0,
+          width: "100%",
+          maxWidth: 1000,
+          margin: "0 auto",
+        }}
+      >
+        {/* Left: Hollywood */}
+        <div style={{ flex: 1, minWidth: 0, padding: "0 0.5vw" }}>
+          <HollywoodQuiz />
+        </div>
+        {/* Right: Kollywood */}
+        <div style={{ flex: 1, minWidth: 0, padding: "0 0.5vw" }}>
+          <KollywoodQuiz />
         </div>
       </div>
     </div>
