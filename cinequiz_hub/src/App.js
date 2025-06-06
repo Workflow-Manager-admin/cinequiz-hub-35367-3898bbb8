@@ -1,35 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './App.css';
+import Login from './Login';
+import MainContainer from './MainContainer';
 
+/**
+ * App routes authentication and dashboard.
+ * - Shows Login if not authenticated.
+ * - Shows MainContainer (dashboard) if authenticated.
+ */
 function App() {
+  const [user, setUser] = useState(null);
+
+  // Handle post-login state
+  function handleLogin(userObj) {
+    setUser(userObj);
+  }
+
   return (
     <div className="app">
-      <nav className="navbar">
-        <div className="container">
-          <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-            <div className="logo">
-              <span className="logo-symbol">*</span> KAVIA AI
-            </div>
-            <button className="btn">Template Button</button>
-          </div>
-        </div>
-      </nav>
-
-      <main>
-        <div className="container">
-          <div className="hero">
-            <div className="subtitle">AI Workflow Manager Template</div>
-            
-            <h1 className="title">cinequiz_hub</h1>
-            
-            <div className="description">
-              Start building your application.
-            </div>
-            
-            <button className="btn btn-large">Button</button>
-          </div>
-        </div>
-      </main>
+      {!user ? (
+        <Login onLogin={handleLogin} />
+      ) : (
+        <MainContainer user={user} />
+      )}
     </div>
   );
 }
